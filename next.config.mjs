@@ -7,7 +7,9 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export', // <-- Ajoute cette ligne pour activer l'export statique
+  output: 'export', // Active l'export statique
+  basePath: '/hugoreal.fr',       // Spécifie que le site est servi depuis /hugoreal.fr
+  assetPrefix: '/hugoreal.fr/',    // Précise le préfixe pour les assets statiques
   eslint: {
     ignoreDuringBuilds: true,
   },
