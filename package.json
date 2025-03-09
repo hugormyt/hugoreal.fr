@@ -1,13 +1,13 @@
 {
   "name": "my-v0-project",
-  "version": "0.1.2",
+  "version": "0.1.9",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "npx serve out",
-    "lint": "next lint",
-    "deploy": "gh-pages -d out"
+    "start": "npx serve out --single -p 3000",
+    "deploy": "gh-pages -d out",
+    "lint": "next lint"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
