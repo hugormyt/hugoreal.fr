@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "cp CNAME out/",
     "start": "npx serve out --single -p 3000",
     "deploy": "gh-pages -d out",
     "lint": "next lint"
