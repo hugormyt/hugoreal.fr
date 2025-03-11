@@ -59,6 +59,7 @@ const config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      // --- AJOUT ICI ---
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -68,15 +69,26 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        // Ajout de l'animation ripple
+        ripple: {
+          "0%": {
+            transform: "translate(-50%, -50%) scale(1)",
+          },
+          "100%": {
+            transform: "translate(-50%, -50%) scale(2.5)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        // Ajout de la classe animate-ripple
+        ripple: "ripple 6s linear infinite",
       },
+      // --- FIN AJOUT ---
     },
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config
 
 export default config
-

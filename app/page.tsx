@@ -7,6 +7,9 @@ import { ArrowRight, Linkedin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 
+// Importe le composant Ripple
+import { Ripple } from "@/components/Ripple"
+
 export default function HomePage() {
   const [scrollY, setScrollY] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
@@ -14,9 +17,7 @@ export default function HomePage() {
 
   useEffect(() => {
     setMounted(true)
-    const handleScroll = () => {
-      setScrollY(window.scrollY)
-    }
+    const handleScroll = () => setScrollY(window.scrollY)
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
@@ -62,14 +63,29 @@ export default function HomePage() {
           content="Hugo Real – Tech entrepreneur, AI enthusiast, and creative hacker transforming industries through data and strategic innovation. Co-founder of MyTracks, revolutionizing the used car market."
         />
       </Head>
+
       <div className="min-h-screen bg-background">
         {/* Hero Section */}
         <section className="relative h-screen flex items-center justify-center overflow-hidden">
+          {/* 1) Le Ripple occupe toute la section */}
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <Ripple
+              mainCircleSize={210}
+              mainCircleOpacity={0.24}
+              numCircles={8}
+              // Retire la ligne suivante si tu veux voir le ripple entièrement :
+              // className="[mask-image:linear-gradient(to_bottom,white,transparent)]"
+            />
+          </div>
+
+          {/* 2) Le dégradé au-dessus du Ripple (ou en-dessous si tu inverses z-0 / z-10) */}
           <div
-            className="absolute inset-0 z-0 bg-gradient-to-b from-primary/10 to-background"
+            className="absolute inset-0 z-10 bg-gradient-to-b from-primary/10 to-background"
             style={{ transform: `translateY(${scrollY * 0.5}px)` }}
           />
-          <div className="container px-4 md:px-6 z-10">
+
+          {/* 3) Le contenu Hero (photo, texte) en z-20 */}
+          <div className="container px-4 md:px-6 z-20">
             {mounted ? (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -129,7 +145,8 @@ export default function HomePage() {
               </div>
             )}
           </div>
-          <div className="absolute bottom-10 left-0 right-0 flex justify-center animate-bounce">
+
+          <div className="absolute bottom-10 left-0 right-0 flex justify-center animate-bounce z-20">
             <ArrowRight className="h-6 w-6 transform rotate-90" />
           </div>
         </section>
