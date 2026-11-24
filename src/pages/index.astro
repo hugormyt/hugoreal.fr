@@ -1,20 +1,20 @@
 ---
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
-import NoteList from '../components/NoteList.astro';
-import { site, facts, fields } from '../data/site';
-import { getNotes } from '../lib/notes';
+import HR from '../components/HR.astro';
+import { site, facts, fields, why } from '../data/site';
 
-const notes = (await getNotes()).slice(0, 3);
 ---
 
 <Base>
   <Hero />
 
-  <!-- 01 — About -->
+  <HR />
+
+  <!-- 02 — About -->
   <section id="about" class="section">
     <div class="wrap">
-      <div class="section-head"><span class="mono">01</span><h2>About</h2></div>
+      <div class="section-head"><span class="mono">02</span><h2>About</h2></div>
       <div class="about">
         <figure class="portrait" data-reveal>
           <img src={site.photo} alt="Portrait of Hugo Real" width="420" height="420" loading="lazy" />
@@ -40,26 +40,38 @@ const notes = (await getNotes()).slice(0, 3);
     </div>
   </section>
 
-  <!-- 02 — Building -->
+  <!-- 03 — Building -->
   <section id="building" class="section building">
     <div class="wrap">
-      <div class="section-head"><span class="mono">02</span><h2>Currently building</h2></div>
+      <div class="section-head"><span class="mono">03</span><h2>Currently building</h2></div>
       <a class="project" href={site.links.mytracks} target="_blank" rel="noopener" data-reveal>
         <span class="mono tag">Co-founder</span>
         <span class="name serif">MyTracks</span>
+        <span class="baseline serif">The Valuation Company</span>
         <span class="pitch">
-          Making the used-car market legible. MyTracks turns vehicle data into clear decisions for buyers and
-          professionals.
+          Our goal: become <strong>the reference for valuing goods online</strong> — starting with used cars.
+          What is it really worth? MyTracks answers with data, not guesswork.
         </span>
         <span class="mono go">mytracks.fr ↗</span>
       </a>
+
+      <h3 class="why-title mono">Why a fair price matters for the economy</h3>
+      <ol class="why">
+        {why.map((w, k) => (
+          <li data-reveal style={`transition-delay:${k * 80}ms`}>
+            <span class="mono n">{String(k + 1).padStart(2, '0')}</span>
+            <h4 class="serif">{w.title}</h4>
+            <p>{w.text}</p>
+          </li>
+        ))}
+      </ol>
     </div>
   </section>
 
-  <!-- 03 — Fields -->
+  <!-- 04 — Fields -->
   <section id="fields" class="section">
     <div class="wrap">
-      <div class="section-head"><span class="mono">03</span><h2>Fields</h2></div>
+      <div class="section-head"><span class="mono">04</span><h2>Fields</h2></div>
       <ol class="fields">
         {fields.map((f, k) => (
           <li data-reveal style={`transition-delay:${(k % 3) * 80}ms`}>
@@ -69,15 +81,6 @@ const notes = (await getNotes()).slice(0, 3);
           </li>
         ))}
       </ol>
-    </div>
-  </section>
-
-  <!-- 04 — Notes -->
-  <section id="notes" class="section">
-    <div class="wrap">
-      <div class="section-head"><span class="mono">04</span><h2>Notes</h2></div>
-      <NoteList notes={notes} />
-      {notes.length > 0 && <p class="more"><a class="mono" href="/notes/">All notes →</a></p>}
     </div>
   </section>
 
@@ -133,6 +136,17 @@ const notes = (await getNotes()).slice(0, 3);
   .project:hover::after { opacity: .6; transform: scale(1.1); }
   .tag, .go { opacity: .7; }
   .name { font-size: clamp(3rem, 9vw, 6.5rem); line-height: .95; }
+  .baseline { font-size: clamp(1.4rem, 3vw, 2.2rem); font-style: italic; color: var(--accent); margin-top: -4px; }
+  .pitch strong { font-weight: 600; }
+
+  .why-title { color: var(--ink-soft); margin: clamp(40px, 6vw, 64px) 0 20px; font-weight: 400; }
+  .why { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 4vw, 48px); }
+  .why li { border-top: 2px solid var(--ink); padding-top: 18px; }
+  .why .n { color: var(--accent); }
+  .why h4 { font-size: 1.7rem; line-height: 1.1; margin: 12px 0 10px; }
+  .why p { margin: 0; color: var(--ink-soft); }
+  .why em { font-style: italic; }
+  @media (max-width: 860px) { .why { grid-template-columns: 1fr; } }
   .pitch { max-width: 52ch; font-size: 1.1rem; opacity: .85; position: relative; z-index: 1; }
   .go { color: var(--accent); opacity: 1; }
 
@@ -145,8 +159,6 @@ const notes = (await getNotes()).slice(0, 3);
   .fields p { margin: 0; color: var(--ink-soft); }
   @media (max-width: 860px) { .fields { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 560px) { .fields { grid-template-columns: 1fr; } }
-
-  .more { margin-top: 24px; }
 
   /* Contact */
   .big { font-size: clamp(2rem, 5vw, 3.8rem); line-height: 1.1; max-width: 22ch; margin: 0; }

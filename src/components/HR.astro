@@ -1,0 +1,78 @@
+---
+// Section « H/R » : le H et le R ne bougent jamais, les lettres qui suivent se transforment.
+import { hr } from '../data/site';
+const first = hr[0];
+---
+
+<section id="hr" class="section hr" data-hr>
+  <div class="wrap">
+    <div class="section-head"><span class="mono">01</span><h2>H/R</h2></div>
+    <p class="word serif" aria-label={`${first.h} ${first.r}`} data-hr-word>
+      <span class="line"><span class="i">H</span><span class="rest" data-hr-h>{first.h.slice(1)}</span></span>
+      <span class="line"><span class="i">R</span><span class="rest" data-hr-r>{first.r.slice(1)}</span></span>
+    </p>
+
+    <div class="bottom">
+      <div class="chips" role="group" aria-label="Choose a reading of HR">
+        {hr.map((item, k) => (
+          <button type="button" class="chip mono" data-hr-btn={k} data-h={item.h} data-r={item.r} aria-pressed={k === 0 ? 'true' : 'false'}>
+            <span class="n">{String(k + 1).padStart(2, '0')}</span>
+            {item.h} {item.r}
+            <span class="bar" aria-hidden="true"></span>
+          </button>
+        ))}
+      </div>
+
+      <div class="panels">
+        {hr.map((item, k) => (
+          <div class="panel" data-hr-panel={k}>
+            <p class="mono tag">{item.h} {item.r} — {item.tag}</p>
+            <p class="text">{item.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../scripts/hr.ts';
+</script>
+
+<style>
+  .word {
+    margin: 0 0 clamp(32px, 5vw, 56px);
+    font-size: clamp(3.6rem, 14vw, 11rem);
+    line-height: .92;
+    letter-spacing: -0.02em;
+  }
+  /* Une ligne par mot : H et R restent dans la même colonne, à gauche, et ne bougent jamais. */
+  .line { display: flex; align-items: baseline; white-space: nowrap; }
+  .rest { white-space: pre; }
+  .rest :global(.l) { display: inline-block; will-change: transform, opacity, filter; }
+  .i { color: var(--accent); font-style: italic; flex: none; padding-right: .02em; }
+  .bottom { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 6vw, 80px); align-items: start; }
+  .chips { display: grid; border-top: 1px solid var(--line); }
+  .chip {
+    position: relative; display: flex; gap: 16px; align-items: center;
+    padding: 16px 4px; border: 0; border-bottom: 1px solid var(--line);
+    background: none; color: var(--ink-soft); cursor: pointer; text-align: left;
+    font-size: .8rem;
+  }
+  .chip:hover { color: var(--ink); }
+  .chip[aria-pressed='true'] { color: var(--ink); }
+  .chip .n { color: var(--ink-soft); }
+  .chip[aria-pressed='true'] .n { color: var(--accent); }
+  .bar { position: absolute; left: 0; bottom: -1px; height: 2px; width: 0; background: var(--accent); }
+  .chip[aria-pressed='true'] .bar { width: 100%; }
+  :global([data-hr].auto) .chip[aria-pressed='true'] .bar { animation: fill var(--hr-delay, 5s) linear; }
+  @keyframes fill { from { width: 0; } to { width: 100%; } }
+  .panel + .panel { margin-top: 24px; }
+  .panel[hidden] { display: none; }
+  .panel.in { animation: rise .5s ease; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+  .tag { color: var(--accent); margin: 0 0 12px; }
+  .text { margin: 0; font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.5; max-width: 52ch; }
+  @media (max-width: 760px) { .bottom { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .panel.in { animation: none; } }
+</style>

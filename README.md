@@ -22,19 +22,13 @@ avec le bouton *Run workflow*.
 
 | Je veux…                         | Fichier                                   |
 | -------------------------------- | ----------------------------------------- |
-| changer un texte, un lien, la photo | `src/data/site.ts`                     |
+| changer un texte, un lien, les lectures H/R, les arguments MyTracks | `src/data/site.ts` |
+| la photo / le logo | `public/hugo-real.jpg`, `src/components/Logo.astro`, `public/favicon.svg` |
 | modifier la page d'accueil       | `src/pages/index.astro`                   |
-| écrire une note                  | `src/content/notes/<slug>.md`             |
 | changer couleurs / polices       | `src/styles/global.css` (variables `:root`) |
 | l'animation du hero              | `src/scripts/tour.ts`                     |
 | `<head>`, SEO, en-tête, pied de page | `src/layouts/Base.astro`, `src/components/` |
 | images, favicon, fichiers bruts  | `public/` (copié tel quel)                |
-
-### Écrire une note
-
-Copier `src/content/notes/exemple-de-note.md`, le renommer (le nom du fichier devient l'URL
-`/notes/<nom>/`), remplir le front-matter et passer `draft: false`. Les brouillons (`draft: true`)
-sont visibles avec `npm run dev` mais jamais publiés. Les notes alimentent aussi `/rss.xml` et le sitemap.
 
 ## Arborescence
 
@@ -42,11 +36,9 @@ sont visibles avec `npm run dev` mais jamais publiés. Les notes alimentent auss
 src/
   data/site.ts          contenu perso (textes, liens)
   layouts/Base.astro    squelette HTML commun
-  components/           Header, Footer, Hero, NoteList
-  pages/                une page = un fichier (index, notes/, 404, rss.xml)
-  content/notes/        notes en Markdown
-  content.config.ts     schéma des notes
-  scripts/              petit JS côté navigateur (animation, apparitions)
+  components/           Header, Footer, Hero, HR, Logo
+  pages/                une page = un fichier (index, 404)
+  scripts/              petit JS côté navigateur (animations, apparitions)
   styles/global.css     thème et styles globaux
 public/                 favicon, CNAME, robots.txt…
 ```
