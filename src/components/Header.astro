@@ -1,0 +1,39 @@
+---
+const path = Astro.url.pathname;
+const nav = [
+  { href: '/#about', label: 'About' },
+  { href: '/#fields', label: 'Fields' },
+  { href: '/notes/', label: 'Notes' },
+  { href: '/#contact', label: 'Contact' },
+];
+---
+
+<header class="header">
+  <div class="wrap inner">
+    <a href="/" class="logo serif" aria-label="Home">H<span>/</span>R</a>
+    <nav aria-label="Main">
+      {nav.map((l) => (
+        <a href={l.href} class="mono" aria-current={path.startsWith(l.href) && l.href !== '/' ? 'page' : undefined}>
+          {l.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--paper) 82%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .inner { display: flex; align-items: center; justify-content: space-between; height: 56px; }
+  .logo { font-size: 1.6rem; text-decoration: none; line-height: 1; }
+  .logo span { color: var(--accent); }
+  nav { display: flex; gap: clamp(12px, 3vw, 28px); }
+  nav a { text-decoration: none; color: var(--ink-soft); }
+  nav a:hover, nav a[aria-current='page'] { color: var(--ink); }
+  @media (max-width: 420px) { nav a:first-child { display: none; } }
+</style>

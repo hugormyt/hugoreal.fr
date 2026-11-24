@@ -1,0 +1,155 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import NoteList from '../components/NoteList.astro';
+import { site, facts, fields } from '../data/site';
+import { getNotes } from '../lib/notes';
+
+const notes = (await getNotes()).slice(0, 3);
+---
+
+<Base>
+  <Hero />
+
+  <!-- 01 — About -->
+  <section id="about" class="section">
+    <div class="wrap">
+      <div class="section-head"><span class="mono">01</span><h2>About</h2></div>
+      <div class="about">
+        <figure class="portrait" data-reveal>
+          <img src={site.photo} alt="Portrait of Hugo Real" width="420" height="420" loading="lazy" />
+          <figcaption class="mono">Fig. 1 — the founder, in his natural habitat</figcaption>
+        </figure>
+        <div class="bio" data-reveal>
+          <p class="lead serif">
+            French tech entrepreneur, born in Toulouse in 1998 — the year France won the World Cup.
+            Clearly not a coincidence.
+          </p>
+          <p>
+            I studied Operational Research and Decision Support: the maths of making the best choice when
+            there are too many options. I now use it the way a hacker would — rigorous analysis on one side,
+            unconventional shortcuts on the other — to turn messy problems into products.
+          </p>
+          <dl class="facts">
+            {facts.map((f) => (
+              <div><dt class="mono">{f.label}</dt><dd>{f.value}</dd></div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 — Building -->
+  <section id="building" class="section building">
+    <div class="wrap">
+      <div class="section-head"><span class="mono">02</span><h2>Currently building</h2></div>
+      <a class="project" href={site.links.mytracks} target="_blank" rel="noopener" data-reveal>
+        <span class="mono tag">Co-founder</span>
+        <span class="name serif">MyTracks</span>
+        <span class="pitch">
+          Making the used-car market legible. MyTracks turns vehicle data into clear decisions for buyers and
+          professionals.
+        </span>
+        <span class="mono go">mytracks.fr ↗</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 03 — Fields -->
+  <section id="fields" class="section">
+    <div class="wrap">
+      <div class="section-head"><span class="mono">03</span><h2>Fields</h2></div>
+      <ol class="fields">
+        {fields.map((f, k) => (
+          <li data-reveal style={`transition-delay:${(k % 3) * 80}ms`}>
+            <span class="mono n">{String(k + 1).padStart(2, '0')}</span>
+            <h3 class="serif">{f.title}</h3>
+            <p>{f.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 04 — Notes -->
+  <section id="notes" class="section">
+    <div class="wrap">
+      <div class="section-head"><span class="mono">04</span><h2>Notes</h2></div>
+      <NoteList notes={notes} />
+      {notes.length > 0 && <p class="more"><a class="mono" href="/notes/">All notes →</a></p>}
+    </div>
+  </section>
+
+  <!-- 05 — Contact -->
+  <section id="contact" class="section contact">
+    <div class="wrap">
+      <div class="section-head"><span class="mono">05</span><h2>Contact</h2></div>
+      <p class="big serif" data-reveal>
+        Got a hard problem, a crazy idea or a dataset nobody understands?
+        <a href={site.links.linkedin} target="_blank" rel="noopener">Let’s talk on LinkedIn&nbsp;↗</a>
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* About */
+  .about { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 80px); align-items: start; }
+  .portrait { margin: 0; }
+  .portrait img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 4px; transition: filter .5s; }
+  /* N&B au repos, couleur au survol (uniquement sur les écrans avec souris) */
+  @media (hover: hover) {
+    .portrait img { filter: grayscale(1) contrast(1.05); }
+    .portrait:hover img { filter: none; }
+  }
+  .portrait figcaption { margin-top: 10px; color: var(--ink-soft); font-size: .68rem; }
+  .lead { font-size: clamp(1.6rem, 3vw, 2.2rem); line-height: 1.2; margin: 0 0 24px; }
+  .bio > p:not(.lead) { color: var(--ink-soft); max-width: 60ch; }
+  .facts { margin: 32px 0 0; border-top: 1px solid var(--line); }
+  .facts div { display: grid; grid-template-columns: 9rem 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .facts dt { color: var(--ink-soft); padding-top: .25em; }
+  .facts dd { margin: 0; }
+  @media (max-width: 760px) {
+    .about { grid-template-columns: 1fr; }
+    .portrait { max-width: 320px; }
+  }
+  @media (max-width: 420px) { .facts div { grid-template-columns: 1fr; gap: 2px; } }
+
+  /* Building */
+  .project {
+    display: grid; gap: 12px;
+    padding: clamp(28px, 5vw, 56px);
+    background: var(--ink); color: var(--paper);
+    border-radius: 6px; text-decoration: none;
+    position: relative; overflow: hidden;
+  }
+  .project::after {
+    content: ''; position: absolute; inset: auto -20% -60% auto; width: 60%; aspect-ratio: 1;
+    background: radial-gradient(circle, var(--accent), transparent 65%); opacity: .35;
+    transition: opacity .4s, transform .6s;
+  }
+  .project:hover { color: var(--paper); }
+  .project:hover::after { opacity: .6; transform: scale(1.1); }
+  .tag, .go { opacity: .7; }
+  .name { font-size: clamp(3rem, 9vw, 6.5rem); line-height: .95; }
+  .pitch { max-width: 52ch; font-size: 1.1rem; opacity: .85; position: relative; z-index: 1; }
+  .go { color: var(--accent); opacity: 1; }
+
+  /* Fields */
+  .fields { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+  .fields li { padding: 28px 24px 32px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); transition: background .3s; }
+  .fields li:hover { background: var(--paper-2); }
+  .fields .n { color: var(--accent); }
+  .fields h3 { font-size: 1.8rem; line-height: 1.1; margin: 18px 0 10px; }
+  .fields p { margin: 0; color: var(--ink-soft); }
+  @media (max-width: 860px) { .fields { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .fields { grid-template-columns: 1fr; } }
+
+  .more { margin-top: 24px; }
+
+  /* Contact */
+  .big { font-size: clamp(2rem, 5vw, 3.8rem); line-height: 1.1; max-width: 22ch; margin: 0; }
+  .big a { color: var(--accent); text-decoration: none; display: inline-block; border-bottom: 2px solid currentColor; }
+  .big a:hover { color: var(--ink); }
+</style>

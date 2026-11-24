@@ -1,0 +1,39 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate } from '../lib/notes';
+
+interface Props { notes: CollectionEntry<'notes'>[] }
+const { notes } = Astro.props;
+---
+
+{notes.length === 0 ? (
+  <p class="empty">First notes coming soon. Subscribe via <a href="/rss.xml">RSS</a> to catch them.</p>
+) : (
+  <ol class="list">
+    {notes.map((n) => (
+      <li data-reveal>
+        <a href={`/notes/${n.id}/`}>
+          <time class="mono" datetime={n.data.date.toISOString()}>{formatDate(n.data.date)}</time>
+          <span class="title serif">{n.data.title}{n.data.draft && <span class="draft mono"> draft</span>}</span>
+          <span class="desc">{n.data.description}</span>
+        </a>
+      </li>
+    ))}
+  </ol>
+)}
+
+<style>
+  .list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  li { border-bottom: 1px solid var(--line); }
+  a {
+    display: grid; grid-template-columns: 9rem 1fr; gap: 4px 24px;
+    padding: 22px 0; text-decoration: none;
+  }
+  time { color: var(--ink-soft); padding-top: .5em; grid-row: span 2; }
+  .title { font-size: 1.8rem; line-height: 1.15; }
+  .desc { color: var(--ink-soft); }
+  a:hover .title { color: var(--accent); }
+  .draft { color: var(--accent); font-size: .65rem; vertical-align: middle; }
+  .empty { color: var(--ink-soft); }
+  @media (max-width: 600px) { a { grid-template-columns: 1fr; } time { grid-row: auto; padding: 0; } }
+</style>
